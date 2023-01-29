@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createNewBill,
+  deleteBillingInfo,
   getAllBill,
   updateBillingInfo,
 } from "../services/billingService";
@@ -73,6 +74,19 @@ const billSlice = createSlice({
         state.error = "";
       })
       .addCase(updateBillingInfo.rejected, (state, action) => {
+        state.loader = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteBillingInfo.pending, (state) => {
+        state.loader = true;
+        state.error = "";
+      })
+      .addCase(deleteBillingInfo.fulfilled, (state, action) => {
+        state.loader = false;
+        state.success = true;
+        state.error = "";
+      })
+      .addCase(deleteBillingInfo.rejected, (state, action) => {
         state.loader = false;
         state.error = action.payload;
       });

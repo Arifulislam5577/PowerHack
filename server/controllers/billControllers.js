@@ -32,3 +32,12 @@ export const updateBillingInfo = catchAsync(async (req, res) => {
     return res.status(500).json({ message: "Faild to update" });
   }
 });
+
+export const deleteBillInfo = catchAsync(async (req, res) => {
+  const billInfo = await Bill.findByIdAndDelete(req.params.id);
+  if (billInfo) {
+    return res.status(200).json({ message: "Delete Sucessful" });
+  } else {
+    return res.status(500).json({ message: "Faild to delete" });
+  }
+});
