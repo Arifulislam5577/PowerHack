@@ -9,3 +9,11 @@ body {
   font-weight: 400;
   background-color: #e5e7eb;
 }
+
+.error {
+  display: none;
+}
+
+input:invalid ~ .error {
+  display: block;
+}

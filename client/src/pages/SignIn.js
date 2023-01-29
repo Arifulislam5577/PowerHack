@@ -1,76 +1,108 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import useRedirect from "../hooks/useRedirect";
+import { useDispatch, useSelector } from "react-redux";
+import FormInput from "../components/FormInput";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { createNewUser } from "../redux/services/authService";
+
+// SCHEME OF SIGNIN
+
+const schema = yup.object({
+  name: yup.string().required("Full Name is required").min(6).max(255),
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Must be a valid email")
+    .max(255),
+  password: yup.string().required("Password is required").min(6).max(12),
+});
 
 const SignIn = () => {
+  const redirect = useRedirect();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((state) => state.auth);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    dispatch(createNewUser(data));
+  };
+
+  useEffect(() => {
+    if (user) {
+      navigate(redirect);
+    }
+  }, [redirect, user, navigate]);
   return (
     <section className="py-10 flex items-center justify-center">
-      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-white ">
-        <div className="mb-8 text-center">
+      <div className="flex flex-col max-w-sm p-6 rounded-md sm:p-10 bg-white ">
+        <div className="mb-5 text-center">
           <h1 className="my-3 text-4xl font-bold">Sign in</h1>
-          <p className="text-sm dark:text-gray-400">
-            Sign in to access your account
-          </p>
+
+          {error ? (
+            <p className="text-sm text-red-500">{error}</p>
+          ) : (
+            <p className="text-sm text-gray-400">
+              Sign in to create your account
+            </p>
+          )}
         </div>
-        <form className="space-y-4 ng-untouched ng-pristine ng-valid">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4 ng-untouched ng-pristine ng-valid"
+        >
           <div className="space-y-4">
-            <div>
-              <label for="name" className="block mb-2 text-sm">
-                Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="John Doe"
-                className="w-full px-3 py-2 placeholder:text-sm border rounded-md bg-gray-100"
-              />
-            </div>
-            <div>
-              <label for="email" className="block mb-2 text-sm">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="example@gmail.com"
-                className="w-full px-3 py-2 placeholder:text-sm border rounded-md bg-gray-100"
-              />
-            </div>
-            <div>
-              <div className="flex justify-between mb-2">
-                <label for="password" className="text-sm">
-                  Password
-                </label>
-                <a
-                  rel="noopener noreferrer"
-                  href="#password"
-                  className="text-xs hover:underline dark:text-gray-400"
-                >
-                  Forgot password?
-                </a>
-              </div>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="*****"
-                className="w-full px-3 py-2 placeholder:text-sm border rounded-md bg-gray-100"
-              />
-            </div>
+            <FormInput
+              name="name"
+              placeholder="John Doe"
+              type="text"
+              label="Full Name"
+              errorMessage={errors.name?.message}
+              register={{ ...register("name") }}
+            />
+            <FormInput
+              type="email"
+              placeholder="example@gmail.com"
+              name="email"
+              errorMessage={errors.email?.message}
+              label="Email Address"
+              register={{ ...register("email") }}
+            />
+            <FormInput
+              type="password"
+              placeholder="******"
+              name="password"
+              errorMessage={errors.password?.message}
+              label="Password"
+              register={{ ...register("password") }}
+            />
           </div>
           <div className="space-y-2">
             <div>
               <button
-                type="button"
+                type="submit"
+                disabled={loading}
                 className="w-full px-8 py-3 rounded-md bg-slate-900 text-white"
               >
-                Sign in
+                {loading ? "Generating Id..." : "Sign in"}
               </button>
             </div>
             <p className="px-6 text-sm text-center dark:text-gray-400">
               Already have an account?{" "}
-              <Link to="/login" className="hover:underline dark:text-slate-900">
+              <Link
+                to={`/login?redirect=${redirect}`}
+                className="hover:underline dark:text-slate-900"
+              >
                 Login
               </Link>
               .
