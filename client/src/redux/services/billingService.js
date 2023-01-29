@@ -8,7 +8,7 @@ export const createNewBill = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
       const { name, email, amount, phone } = billingInfo;
       const { data } = await axios.post(
-        `http://localhost:5000/api/add-billing`,
+        `https://powerhack-arifulislam5577.vercel.app/api/add-billing`,
         { fullName: name, email, amount, phone },
         {
           headers: {
@@ -36,7 +36,7 @@ export const getAllBill = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       const { data } = await axios.get(
-        `http://localhost:5000/api/billing-list?page=${page}&searchBy=${keyword}`,
+        `https://powerhack-arifulislam5577.vercel.app/api/billing-list?page=${page}&searchBy=${keyword}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export const updateBillingInfo = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       const { data } = await axios.patch(
-        `http://localhost:5000/api/update-billing/${_id}`,
+        `https://powerhack-arifulislam5577.vercel.app/api/update-billing/${_id}`,
         { ...updateInfo },
         {
           headers: {
@@ -91,7 +91,7 @@ export const deleteBillingInfo = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       const { data } = await axios.delete(
-        `http://localhost:5000/api/delete-billing/${billId}`,
+        `https://powerhack-arifulislam5577.vercel.app/api/delete-billing/${billId}`,
         {
           headers: {
             "Content-Type": "application/json",

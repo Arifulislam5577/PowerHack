@@ -42,7 +42,6 @@ export const getAllBillingList = catchAsync(async (req, res) => {
 
 export const updateBillingInfo = catchAsync(async (req, res) => {
   const billInfo = await Bill.findByIdAndUpdate(req.params.id, req.body);
-
   if (billInfo) {
     return res.status(200).json(billInfo);
   } else {

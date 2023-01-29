@@ -7,7 +7,7 @@ export const createNewUser = createAsyncThunk(
     try {
       const { name, email, password } = userInfo;
       const { data } = await axios.post(
-        `http://localhost:5000/api/registration`,
+        `https://powerhack-arifulislam5577.vercel.app/api/registration`,
         { fullName: name, email, password },
         {
           headers: {
@@ -36,7 +36,7 @@ export const loginUser = createAsyncThunk(
       const { email, password } = userInfo;
 
       const { data } = await axios.post(
-        `http://localhost:5000/api/login`,
+        `https://powerhack-arifulislam5577.vercel.app/api/login`,
         { email, password },
         {
           headers: {

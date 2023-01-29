@@ -1,10 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  handleModal,
-  handleUpdate,
-  reset,
-} from "../redux/features/billingSlice";
+import { reset } from "../redux/features/billingSlice";
 import {
   deleteBillingInfo,
   getAllBill,
@@ -20,8 +16,6 @@ const Table = () => {
     (state) => state.bills
   );
   const pageNumber = Math.ceil(billInfo?.totalBill / 10);
-
-  // UPDATE DATA
 
   // DELETE DATA
   const deleteBillInfo = useCallback(
@@ -66,7 +60,6 @@ const Table = () => {
         </thead>
         <tbody>
           {loader && <AddBillingLoader />}
-
           {billInfo?.billList?.map((bill) => (
             <BillingDataRow
               key={bill._id}
@@ -77,7 +70,7 @@ const Table = () => {
         </tbody>
       </table>
 
-      <div className={`${pageNumber < 1 ? "hidden" : "mt-5"}`}>
+      <div className={`${pageNumber <= 1 ? "hidden" : "mt-5"}`}>
         <Pagination pageNumber={pageNumber} page={page} setPage={setPage} />
       </div>
     </div>

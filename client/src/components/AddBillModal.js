@@ -3,7 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
-import { createNewBill, getAllBill } from "../redux/services/billingService";
+import {
+  createNewBill,
+  getAllBill,
+  updateBillingInfo,
+} from "../redux/services/billingService";
 import { handleModal, reset } from "../redux/features/billingSlice";
 import FormInput from "./FormInput";
 const schema = yup.object({
@@ -32,8 +36,8 @@ const Modal = () => {
 
   const onSubmit = (data) => {
     if (updateData) {
-      const updateInfo = { _id: updateData._id, ...data };
-      dispatch(createNewBill(updateInfo));
+      const updateInfo = { _id: updateData._id, fullName: data.name, ...data };
+      dispatch(updateBillingInfo(updateInfo));
     } else {
       dispatch(createNewBill(data));
     }
