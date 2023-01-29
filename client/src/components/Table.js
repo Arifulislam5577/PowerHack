@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllBill } from "../redux/services/billingService";
+import AddBillingLoader from "./AddBillingLoader";
 import BillingDataRow from "./BillingDataRow";
 import Pagination from "./Pagination";
 
 const Table = () => {
+  const dispatch = useDispatch();
+  const { loader, billList } = useSelector((state) => state.bills);
+
+  useEffect(() => {
+    dispatch(getAllBill());
+  }, [dispatch]);
   return (
     <div className="relative overflow-x-auto">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -29,16 +38,11 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
-          <BillingDataRow />
+          {loader && <AddBillingLoader />}
+
+          {billList?.map((bill) => (
+            <BillingDataRow key={bill._id} {...bill} />
+          ))}
         </tbody>
       </table>
 

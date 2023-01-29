@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createNewUser, loginUser } from "../services/authService";
+import { createNewUser, loginUser, logOut } from "../services/authService";
 const user = JSON.parse(localStorage.getItem("userInfo"));
 
 const initialState = {
@@ -13,37 +13,36 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createNewUser.pending, (state) => {
-      state.loading = true;
-      state.error = "";
-    });
-
-    builder.addCase(createNewUser.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.loading = false;
-      state.error = "";
-    });
-
-    builder.addCase(createNewUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
-
-    builder.addCase(loginUser.pending, (state) => {
-      state.loading = true;
-      state.error = "";
-    });
-
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.loading = false;
-      state.error = "";
-    });
-
-    builder.addCase(loginUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
+    builder
+      .addCase(createNewUser.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(createNewUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+        state.error = "";
+      })
+      .addCase(createNewUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+        state.error = "";
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(logOut.fulfilled, (state, action) => {
+        state.user = null;
+      });
   },
 });
 

@@ -94,7 +94,7 @@ const SignIn = () => {
                 disabled={loading}
                 className="w-full px-8 py-3 rounded-md bg-slate-900 text-white"
               >
-                {loading ? "Generating Id..." : "Sign in"}
+                {loading ? "Loading..." : "Sign in"}
               </button>
             </div>
             <p className="px-6 text-sm text-center dark:text-gray-400">

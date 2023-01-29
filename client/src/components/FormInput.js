@@ -7,6 +7,7 @@ const FormInput = ({
   errorMessage,
   placeholder,
   register,
+  defaultValue,
 }) => {
   return (
     <div>
@@ -18,8 +19,9 @@ const FormInput = ({
         id={name}
         name={name}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         {...register}
-        className="w-full px-3 py-2 placeholder:text-sm border rounded-md bg-gray-100"
+        className="w-full text-sm px-3 py-2 placeholder:text-sm border rounded-md bg-gray-100"
       />
       <span className="text-sm mt-1 text-red-500 capitalize">
         {errorMessage}

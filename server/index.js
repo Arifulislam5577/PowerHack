@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userRouter from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
+import billingRouter from "./routes/billingRoute.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 // API
 
 app.use("/api", userRouter);
+app.use("/api", billingRouter);
 
 //ERROR HANDLEING
 
