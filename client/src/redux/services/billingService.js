@@ -31,11 +31,12 @@ export const createNewBill = createAsyncThunk(
 );
 export const getAllBill = createAsyncThunk(
   "bill/getAllBill",
-  async (_, thunkAPI) => {
+  async (query, thunkAPI) => {
+    const { page = 1, keyword = "" } = query;
     try {
       const token = thunkAPI.getState().auth.user.token;
       const { data } = await axios.get(
-        `http://localhost:5000/api/billing-list`,
+        `http://localhost:5000/api/billing-list?page=${page}&searchBy=${keyword}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -51,6 +52,7 @@ export const getAllBill = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
+
       return thunkAPI.rejectWithValue(message);
     }
   }

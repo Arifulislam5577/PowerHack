@@ -1,5 +1,6 @@
 import catchAsync from "express-async-handler";
 import Bill from "../model/bilModel.js";
+import ApiFeature from "../utlis/apiFeature.js";
 
 export const addNewBill = catchAsync(async (req, res) => {
   const { fullName, email, phone, amount } = req.body;
@@ -19,8 +20,24 @@ export const addNewBill = catchAsync(async (req, res) => {
 });
 
 export const getAllBillingList = catchAsync(async (req, res) => {
-  const billList = await Bill.find();
-  res.status(200).json(billList);
+  const bills = await Bill.find();
+  const totalBill = await Bill.countDocuments({
+    $or: [
+      { email: { $regex: req.query.searchBy, $options: "i" } },
+      { phone: { $regex: req.query.searchBy, $options: "i" } },
+      { fullName: { $regex: req.query.searchBy, $options: "i" } },
+    ],
+  });
+  const totalAmount = bills.reduce((acc, bill) => acc + bill.amount, 0);
+  const apiServices = new ApiFeature(
+    Bill.find().sort({ createdAt: -1 }),
+    req.query
+  )
+    .search()
+    .paginate();
+
+  const billList = await apiServices.query;
+  res.status(200).json({ billList, totalBill, totalAmount });
 });
 
 export const updateBillingInfo = catchAsync(async (req, res) => {

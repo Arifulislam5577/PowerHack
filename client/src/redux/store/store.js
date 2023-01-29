@@ -7,6 +7,14 @@ const store = configureStore({
     auth: authReducers,
     bills: billReducers,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["bill/handleUpdate"],
+        ignoredActionPaths: ["bills.updateData.deleteBillInfo"],
+        ignoredPaths: ["bills.updateData.deleteBillInfo"],
+      },
+    }),
 });
 
 export default store;

@@ -6,6 +6,7 @@ import { logOut } from "../redux/services/authService";
 const Header = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { billInfo } = useSelector((state) => state.bills);
   return (
     <header className="bg-white py-4">
       <div className="container">
@@ -17,12 +18,15 @@ const Header = () => {
           </div>
           <div className="flex items-center justify-between gap-3">
             {user ? (
-              <p className="text-sm font-medium text-main">Paid Total: $100</p>
+              <p className="text-sm font-bold text-main">
+                Paid Total: $
+                <span className="text-orange-500">{billInfo?.totalAmount}</span>
+              </p>
             ) : null}
             {user ? (
               <button
                 onClick={() => dispatch(logOut())}
-                className="bg-red-500 px-3 py-1 text-white text-sm rounded"
+                className="bg-orange-500 px-3 py-1 text-white text-sm rounded"
               >
                 Logout
               </button>

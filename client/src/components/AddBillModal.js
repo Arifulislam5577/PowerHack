@@ -41,8 +41,8 @@ const Modal = () => {
 
   useEffect(() => {
     if (success) {
+      dispatch(getAllBill({}));
       dispatch(reset());
-      dispatch(getAllBill());
     }
   }, [success, dispatch]);
   return (

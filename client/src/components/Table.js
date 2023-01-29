@@ -1,19 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBill } from "../redux/services/billingService";
+import {
+  handleModal,
+  handleUpdate,
+  reset,
+} from "../redux/features/billingSlice";
+import {
+  deleteBillingInfo,
+  getAllBill,
+} from "../redux/services/billingService";
 import AddBillingLoader from "./AddBillingLoader";
 import BillingDataRow from "./BillingDataRow";
 import Pagination from "./Pagination";
 
 const Table = () => {
   const dispatch = useDispatch();
-  const { loader, billList } = useSelector((state) => state.bills);
+  const [page, setPage] = useState(1);
+  const { loader, billInfo, error, success } = useSelector(
+    (state) => state.bills
+  );
+  const pageNumber = Math.ceil(billInfo?.totalBill / 10);
+
+  // UPDATE DATA
+
+  // DELETE DATA
+  const deleteBillInfo = useCallback(
+    (id) => {
+      dispatch(deleteBillingInfo(id));
+      dispatch(reset());
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
-    dispatch(getAllBill());
-  }, [dispatch]);
+    if (success || page) {
+      dispatch(getAllBill({ page }));
+    }
+  }, [dispatch, page, success]);
+
   return (
     <div className="relative overflow-x-auto">
+      {error}
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-sm text-slate-900 uppercase bg-white">
           <tr>
@@ -40,14 +67,18 @@ const Table = () => {
         <tbody>
           {loader && <AddBillingLoader />}
 
-          {billList?.map((bill) => (
-            <BillingDataRow key={bill._id} {...bill} />
+          {billInfo?.billList?.map((bill) => (
+            <BillingDataRow
+              key={bill._id}
+              {...bill}
+              deleteBillInfo={deleteBillInfo}
+            />
           ))}
         </tbody>
       </table>
 
-      <div className="mt-5">
-        <Pagination />
+      <div className={`${pageNumber < 1 ? "hidden" : "mt-5"}`}>
+        <Pagination pageNumber={pageNumber} page={page} setPage={setPage} />
       </div>
     </div>
   );

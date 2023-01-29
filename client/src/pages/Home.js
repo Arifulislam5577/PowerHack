@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../components/AddBillModal";
 import Table from "../components/Table";
 import { handleModal, handleUpdate } from "../redux/features/billingSlice";
+import { getAllBill } from "../redux/services/billingService";
 
 const Home = () => {
   const { showModal } = useSelector((state) => state.bills);
   const dispatch = useDispatch();
+  const [keyword, setKeyword] = useState("");
 
   const handleAddBill = () => {
     dispatch(handleUpdate(null));
     dispatch(handleModal());
   };
+
+  useEffect(() => {
+    dispatch(getAllBill({ keyword }));
+  }, [dispatch, keyword]);
   return (
     <section className="py-10">
       <div className="container">
@@ -23,6 +29,8 @@ const Home = () => {
                 type="search"
                 className="border py-2 focus:outline-dashed placeholder:text-sm px-5 rounded bg-gray-200"
                 placeholder="Search..."
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
               />
             </form>
           </div>

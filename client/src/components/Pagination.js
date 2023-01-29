@@ -1,12 +1,14 @@
 import React from "react";
 
-const Pagination = () => {
+const Pagination = ({ pageNumber, setPage, page }) => {
   return (
     <div className="flex justify-center space-x-1 dark:text-gray-100">
       <button
         title="previous"
         type="button"
         className="inline-flex items-center justify-center w-8 h-8 py-0 border rounded-md shadow-md dark:bg-gray-900 dark:border-gray-800"
+        disabled={page === 1}
+        onClick={() => setPage(page - 1)}
       >
         <svg
           viewBox="0 0 24 24"
@@ -20,38 +22,27 @@ const Pagination = () => {
           <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
       </button>
-      <button
-        type="button"
-        title="Page 1"
-        className="inline-flex items-center justify-center w-8 h-8 text-sm font-semibold border rounded shadow-md dark:bg-gray-900 dark:text-violet-400 dark:border-violet-400"
-      >
-        1
-      </button>
-      <button
-        type="button"
-        className="inline-flex items-center justify-center w-8 h-8 text-sm border rounded shadow-md dark:bg-gray-900 dark:border-gray-800"
-        title="Page 2"
-      >
-        2
-      </button>
-      <button
-        type="button"
-        className="inline-flex items-center justify-center w-8 h-8 text-sm border rounded shadow-md dark:bg-gray-900 dark:border-gray-800"
-        title="Page 3"
-      >
-        3
-      </button>
-      <button
-        type="button"
-        className="inline-flex items-center justify-center w-8 h-8 text-sm border rounded shadow-md dark:bg-gray-900 dark:border-gray-800"
-        title="Page 4"
-      >
-        4
-      </button>
+
+      {!isNaN(pageNumber) &&
+        [...Array(pageNumber).keys()].map((btnNumber) => (
+          <button
+            type="button"
+            className={`inline-flex items-center justify-center w-8 h-8 text-sm border rounded shadow-md  ${
+              page === btnNumber + 1 ? "bg-orange-600" : "bg-gray-900"
+            }`}
+            key={btnNumber}
+            onClick={() => setPage(btnNumber + 1)}
+          >
+            {btnNumber + 1}
+          </button>
+        ))}
+
       <button
         title="next"
         type="button"
         className="inline-flex items-center justify-center w-8 h-8 py-0 border rounded-md shadow-md dark:bg-gray-900 dark:border-gray-800"
+        disabled={page === pageNumber}
+        onClick={() => setPage(page + 1)}
       >
         <svg
           viewBox="0 0 24 24"

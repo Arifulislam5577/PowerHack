@@ -7,13 +7,13 @@ import {
 } from "../services/billingService";
 
 const initialState = {
-  billList: [],
+  billInfo: null,
   loading: false,
   loader: false,
   error: "",
   success: false,
   showModal: false,
-  updateData: null,
+  updateData: {},
 };
 
 const billSlice = createSlice({
@@ -57,7 +57,7 @@ const billSlice = createSlice({
       })
       .addCase(getAllBill.fulfilled, (state, action) => {
         state.loading = false;
-        state.billList = action.payload;
+        state.billInfo = action.payload;
         state.error = "";
       })
       .addCase(getAllBill.rejected, (state, action) => {
